@@ -66,19 +66,74 @@ export function TransactionHistory({ limit }: TransactionHistoryProps) {
   
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
         <h2 className="font-poppins font-semibold text-lg">Transaction History</h2>
-        <div className="flex space-x-2">
-          <Button variant="outline" size="sm" className="text-sm bg-accent hover:bg-accent/90">
-            <FilterIcon className="h-4 w-4 mr-1" /> Filter
+        <div className="flex space-x-2 w-full sm:w-auto">
+          <Button variant="outline" size="sm" className="text-xs sm:text-sm bg-accent hover:bg-accent/90 flex-1 sm:flex-auto">
+            <FilterIcon className="h-3 w-3 sm:h-4 sm:w-4 mr-1" /> Filter
           </Button>
-          <Button variant="outline" size="sm" className="text-sm bg-accent hover:bg-accent/90">
-            <Download className="h-4 w-4 mr-1" /> Export
+          <Button variant="outline" size="sm" className="text-xs sm:text-sm bg-accent hover:bg-accent/90 flex-1 sm:flex-auto">
+            <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1" /> Export
           </Button>
         </div>
       </div>
       
-      <div className="bg-muted rounded-xl overflow-hidden shadow-lg">
+      {/* Mobile View - Card Layout */}
+      <div className="block sm:hidden space-y-3 mb-4">
+        {transactions && transactions.length > 0 ? (
+          transactions.map((transaction) => (
+            <div key={transaction.id} className="bg-muted rounded-xl p-4 shadow-md">
+              <div className="flex justify-between items-start mb-3">
+                <div className="flex items-center">
+                  <div className={`
+                    p-2 rounded-lg mr-3
+                    ${transaction.type === 'deposit' ? 'bg-success/20' : 
+                      transaction.type === 'withdraw' ? 'bg-destructive/20' :
+                      transaction.type === 'tournament_entry' ? 'bg-primary/20' : 
+                      transaction.type === 'tournament_win' ? 'bg-warning/20' : 'bg-muted'}
+                  `}>
+                    {getTransactionIcon(transaction.type)}
+                  </div>
+                  <div>
+                    <div className="font-medium">{getTransactionTitle(transaction.type)}</div>
+                    <div className="text-xs text-muted-foreground">{new Date(transaction.createdAt).toLocaleDateString()}</div>
+                  </div>
+                </div>
+                <span className={`
+                  px-2 py-1 text-xs font-medium rounded
+                  ${transaction.status === 'completed' ? 'bg-success/20 text-success' :
+                    transaction.status === 'pending' ? 'bg-warning/20 text-warning' :
+                    'bg-destructive/20 text-destructive'}
+                `}>
+                  {transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1)}
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <div className="text-xs text-muted-foreground">
+                  {transaction.method ? (
+                    `${transaction.method.charAt(0).toUpperCase() + transaction.method.slice(1)} - ${transaction.details || 'No details'}`
+                  ) : (
+                    transaction.details || 'No details'
+                  )}
+                </div>
+                <div className={`text-sm font-rajdhani font-bold ${
+                  Number(transaction.amount) > 0 ? 'text-success' : 'text-destructive'
+                }`}>
+                  {Number(transaction.amount) > 0 ? '+' : ''}
+                  ৳ {Math.abs(Number(transaction.amount)).toLocaleString()}.00
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="bg-muted rounded-xl p-8 text-center">
+            <p className="text-muted-foreground">No transactions found</p>
+          </div>
+        )}
+      </div>
+      
+      {/* Desktop View - Table Layout */}
+      <div className="hidden sm:block bg-muted rounded-xl overflow-hidden shadow-lg">
         <div className="overflow-x-auto">
           <table className="w-full min-w-full divide-y divide-border">
             <thead className="bg-background">

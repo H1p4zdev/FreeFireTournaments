@@ -45,9 +45,9 @@ export function WalletBalance({ userId }: WalletBalanceProps) {
   
   return (
     <>
-      <div className="bg-gradient-to-r from-primary/20 to-secondary/20 rounded-xl p-6 mb-8 shadow-lg">
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <div>
+      <div className="bg-gradient-to-r from-primary/20 to-secondary/20 rounded-xl p-5 mb-6 shadow-lg">
+        <div className="flex flex-col justify-between items-center">
+          <div className="text-center w-full mb-4">
             <p className="text-muted-foreground text-sm mb-1">Total Balance</p>
             <p className="font-rajdhani font-bold text-4xl">
               ৳ {Number(wallet?.balance).toLocaleString()}
@@ -61,57 +61,57 @@ export function WalletBalance({ userId }: WalletBalanceProps) {
               })}
             </p>
           </div>
-          <div className="flex mt-6 md:mt-0 space-x-3">
+          <div className="flex w-full justify-center space-x-3">
             <Button 
               size="lg"
               onClick={() => setIsDepositModalOpen(true)}
-              className="bg-primary hover:bg-primary/90 transition shadow-lg"
+              className="bg-primary hover:bg-primary/90 transition shadow-lg flex-1 px-2 sm:px-4"
             >
-              <Plus className="mr-2 h-4 w-4" /> Deposit
+              <Plus className="mr-1 sm:mr-2 h-4 w-4" /> Deposit
             </Button>
             <Button
               size="lg"
               variant="outline"
               onClick={() => setIsWithdrawModalOpen(true)}
-              className="bg-accent hover:bg-accent/90 border border-border transition"
+              className="bg-accent hover:bg-accent/90 border border-border transition flex-1 px-2 sm:px-4"
             >
-              <CreditCard className="mr-2 h-4 w-4" /> Withdraw
+              <CreditCard className="mr-1 sm:mr-2 h-4 w-4" /> Withdraw
             </Button>
           </div>
         </div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div className="bg-muted rounded-xl p-5 shadow-md">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+        <div className="bg-muted rounded-xl p-4 shadow-md">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-muted-foreground text-sm">Total Deposits</p>
-              <p className="font-rajdhani font-bold text-2xl mt-1">৳ {totalDeposits.toLocaleString()}</p>
+              <p className="text-muted-foreground text-xs sm:text-sm">Total Deposits</p>
+              <p className="font-rajdhani font-bold text-xl sm:text-2xl mt-1">৳ {totalDeposits.toLocaleString()}</p>
             </div>
             <div className="bg-accent p-2 rounded-lg">
-              <ArrowUpRight className="h-5 w-5 text-success" />
+              <ArrowUpRight className="h-4 w-4 sm:h-5 sm:w-5 text-success" />
             </div>
           </div>
         </div>
-        <div className="bg-muted rounded-xl p-5 shadow-md">
+        <div className="bg-muted rounded-xl p-4 shadow-md">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-muted-foreground text-sm">Total Withdrawals</p>
-              <p className="font-rajdhani font-bold text-2xl mt-1">৳ {totalWithdrawals.toLocaleString()}</p>
+              <p className="text-muted-foreground text-xs sm:text-sm">Total Withdrawals</p>
+              <p className="font-rajdhani font-bold text-xl sm:text-2xl mt-1">৳ {totalWithdrawals.toLocaleString()}</p>
             </div>
             <div className="bg-accent p-2 rounded-lg">
-              <ArrowDownRight className="h-5 w-5 text-destructive" />
+              <ArrowDownRight className="h-4 w-4 sm:h-5 sm:w-5 text-destructive" />
             </div>
           </div>
         </div>
-        <div className="bg-muted rounded-xl p-5 shadow-md">
+        <div className="bg-muted rounded-xl p-4 shadow-md">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-muted-foreground text-sm">Tournament Earnings</p>
-              <p className="font-rajdhani font-bold text-2xl mt-1">৳ {tournamentEarnings.toLocaleString()}</p>
+              <p className="text-muted-foreground text-xs sm:text-sm">Tournament Earnings</p>
+              <p className="font-rajdhani font-bold text-xl sm:text-2xl mt-1">৳ {tournamentEarnings.toLocaleString()}</p>
             </div>
             <div className="bg-accent p-2 rounded-lg">
-              <Trophy className="h-5 w-5 text-warning" />
+              <Trophy className="h-4 w-4 sm:h-5 sm:w-5 text-warning" />
             </div>
           </div>
         </div>
