@@ -21,6 +21,7 @@ interface TournamentSubscription {
   connections: Set<WebSocket>;
 }
 
+import type { Express, Request, Response, NextFunction } from "express";
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
   
