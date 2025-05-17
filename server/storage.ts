@@ -41,7 +41,9 @@ export interface IStorage {
   
   // Transaction methods
   createTransaction(transaction: InsertTransaction): Promise<Transaction>;
+  getTransaction(id: number): Promise<Transaction | undefined>;
   getTransactions(userId: number, limit?: number, offset?: number): Promise<Transaction[]>;
+  getTransactionsByStatus(status: string, limit?: number, offset?: number): Promise<Transaction[]>;
   updateTransactionStatus(id: number, status: string): Promise<Transaction>;
 }
 
@@ -264,6 +266,33 @@ export class DatabaseStorage implements IStorage {
     return await query;
   }
 
+  async getTransaction(id: number): Promise<Transaction | undefined> {
+    const [transaction] = await db
+      .select()
+      .from(transactions)
+      .where(eq(transactions.id, id));
+    
+    return transaction;
+  }
+  
+  async getTransactionsByStatus(status: string, limit?: number, offset?: number): Promise<Transaction[]> {
+    let query = db
+      .select()
+      .from(transactions)
+      .where(eq(transactions.status, status))
+      .orderBy(desc(transactions.createdAt));
+    
+    if (limit) {
+      query = query.limit(limit);
+    }
+    
+    if (offset) {
+      query = query.offset(offset);
+    }
+    
+    return await query;
+  }
+  
   async updateTransactionStatus(id: number, status: string): Promise<Transaction> {
     const [transaction] = await db
       .update(transactions)

@@ -11,6 +11,7 @@ import Tournaments from "@/pages/tournaments";
 import TournamentDetails from "@/pages/tournament-details";
 import Wallet from "@/pages/wallet";
 import Profile from "@/pages/profile";
+import Admin from "@/pages/admin";
 import AppLayout from "@/components/layouts/app-layout";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { useEffect, useState } from "react";
@@ -73,6 +74,9 @@ function Router() {
       </Route>
       <Route path="/profile">
         <AuthenticatedRoute component={Profile} />
+      </Route>
+      <Route path="/admin">
+        <AuthenticatedRoute component={Admin} />
       </Route>
       <Route component={NotFound} />
     </Switch>

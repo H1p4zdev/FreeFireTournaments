@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { 
-  Home, Trophy, Wallet, BarChart3, User, LogOut
+  Home, Trophy, Wallet, BarChart3, User, LogOut, ShieldCheck
 } from "lucide-react";
 import { Button } from "./button";
 import { useToast } from "@/hooks/use-toast";
@@ -21,7 +21,7 @@ export function Sidebar({ user }: SidebarProps) {
   const [location] = useLocation();
   const { toast } = useToast();
   
-  const navItems: NavItem[] = [
+  let navItems: NavItem[] = [
     {
       icon: <Home className="h-5 w-5" />,
       label: "Dashboard",
@@ -48,6 +48,15 @@ export function Sidebar({ user }: SidebarProps) {
       href: "/profile"
     }
   ];
+  
+  // Add Admin link if user is an admin
+  if (user?.isAdmin) {
+    navItems.push({
+      icon: <ShieldCheck className="h-5 w-5" />,
+      label: "Admin",
+      href: "/admin"
+    });
+  }
   
   const handleLogout = async () => {
     try {
