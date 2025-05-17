@@ -41,10 +41,6 @@ export const tournamentParticipants = pgTable("tournament_participants", {
   registeredAt: timestamp("registered_at").defaultNow().notNull(),
   position: integer("position"),
   isPaid: boolean("is_paid").notNull().default(false),
-}, (table) => {
-  return {
-    unq: primaryKey({ columns: [table.tournamentId, table.userId] }),
-  };
 });
 
 export const transactions = pgTable("transactions", {
