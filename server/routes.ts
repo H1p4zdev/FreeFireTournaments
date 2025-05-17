@@ -21,7 +21,8 @@ interface TournamentSubscription {
   connections: Set<WebSocket>;
 }
 
-import type { Express, Request, Response, NextFunction } from "express";
+import type { Request, Response } from "express";
+import { registerAdminRoutes } from "./adminRoutes";
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
   
@@ -550,5 +551,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Register admin routes
+  registerAdminRoutes(app, connections);
+  
   return httpServer;
 }

@@ -40,8 +40,7 @@ export default function Admin({ user }: AdminProps) {
     onSuccess: () => {
       toast({
         title: "Deposit approved",
-        description: "Funds have been added to the user's wallet",
-        variant: "success"
+        description: "Funds have been added to the user's wallet"
       });
       queryClient.invalidateQueries({ queryKey: ['/api/admin/transactions/pending'] });
     },
@@ -61,8 +60,7 @@ export default function Admin({ user }: AdminProps) {
     },
     onSuccess: () => {
       toast({
-        title: "Deposit rejected",
-        variant: "info"
+        title: "Deposit rejected"
       });
       queryClient.invalidateQueries({ queryKey: ['/api/admin/transactions/pending'] });
     },
