@@ -83,7 +83,7 @@ export function Sidebar({ user }: SidebarProps) {
           {navItems.map((item) => (
             <li key={item.href}>
               <Link href={item.href}>
-                <a 
+                <div 
                   className={`flex items-center space-x-3 px-4 py-3 rounded-lg font-medium ${
                     location === item.href 
                       ? 'bg-accent text-primary' 
@@ -92,7 +92,7 @@ export function Sidebar({ user }: SidebarProps) {
                 >
                   {item.icon}
                   <span>{item.label}</span>
-                </a>
+                </div>
               </Link>
             </li>
           ))}
