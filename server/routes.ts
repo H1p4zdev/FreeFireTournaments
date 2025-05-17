@@ -12,6 +12,7 @@ import MemoryStore from "memorystore";
 interface Connection {
   ws: WebSocket;
   userId?: number;
+  isAdmin?: boolean;
 }
 
 // Tournament room subscriptions
@@ -48,7 +49,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     const conn: Connection = { ws };
     connections.push(conn);
     
-    ws.on('message', (message) => {
+    ws.on('message', async (message) => {
       try {
         const data = JSON.parse(message.toString());
         
@@ -56,7 +57,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         if (data.type === 'auth') {
           // Authenticate the connection
           const userId = data.userId;
-          conn.userId = userId;
+          const user = await storage.getUser(userId);
+          
+          if (user) {
+            conn.userId = userId;
+            conn.isAdmin = user.isAdmin;
+            
+            ws.send(JSON.stringify({ 
+              type: 'auth_success',
+              isAdmin: user.isAdmin
+            }));
+          } else {
+            ws.send(JSON.stringify({ type: 'auth_failed' }));
+          }
         } else if (data.type === 'subscribe') {
           // Subscribe to tournament updates
           const tournamentId = data.tournamentId;
@@ -411,29 +424,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
         details: `Deposit via ${method} from ${phone}`
       });
       
-      // In a real application, this would redirect to the payment gateway
-      // For demo purposes, we'll simulate a successful payment
-      setTimeout(async () => {
-        // Update transaction status
-        await storage.updateTransactionStatus(transaction.id, 'completed');
-        
-        // Update wallet balance
-        await storage.updateWalletBalance(userId, amount);
-        
-        // Notify connected user via WebSocket
-        const userConnection = connections.find(c => c.userId === userId);
-        if (userConnection && userConnection.ws.readyState === WebSocket.OPEN) {
-          userConnection.ws.send(JSON.stringify({
-            type: 'transaction_update',
+      // Deposit now requires admin approval instead of automatic approval
+      // Notify connected admins via WebSocket that there's a pending deposit
+      connections.forEach(conn => {
+        if (conn.isAdmin && conn.ws.readyState === WebSocket.OPEN) {
+          conn.ws.send(JSON.stringify({
+            type: 'admin_notification',
+            notificationType: 'pending_deposit',
             transactionId: transaction.id,
-            status: 'completed',
-            walletUpdate: {
-              amount,
-              new_balance: Number((await storage.getWallet(userId))?.balance)
-            }
+            userId,
+            amount,
+            method
           }));
         }
-      }, 3000);
+      });
       
       res.status(202).json({ 
         message: 'Deposit initiated',
